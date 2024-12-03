@@ -1,2 +1,8 @@
-#include <cstdlib.h>
-#include <cstd.h>
+#include <stdlib.h>
+#include <stdio.h>
+#include "vector.h"
+
+int main(){
+	printf("hello world");
+	return 0;
+}
