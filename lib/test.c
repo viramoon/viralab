@@ -1,6 +1,6 @@
-#include "vector.h"
-#include <string.h>
 #include <assert.h>
+#include <string.h>
+#include "vector.h"
 
 char Buff[50];
 typedef enum functions {
@@ -17,20 +17,21 @@ int isInFunctions(char* input) {
 }
 
 int testVector() {
-    void* vector = createVector(8, 300);
+    void* vector = createVector(10, 300);
     assert(vector);
     printf("malloc addr is %p\n", ((vectorHeader*)vector) -> mallocHead);
     printf("vector addr is %p\n", vector);
     printf("data addr is %p\n", vector + sizeof(vectorHeader));
     printf("vector capacity is %d\n", ((vectorHeader*)vector) -> capacity);
     printf("vectorHeader size is %d\n", sizeof(vectorHeader));
-    uint8_t* ptr = (uint8_t*)(vector + sizeof(vectorHeader));
-    ptr[0] = 2;
-    ptr[1] = 6;
-    ptr[6] = 10;
+    printf("data 0 addr is %p\n", (((vectorHeader*)vector) -> funcs[INDEX]).index(vector, 0));
+    printf("data 1 addr is %p\n", (((vectorHeader*)vector) -> funcs[INDEX]).index(vector, 1));
+    *(uint8_t*)(((vectorHeader*)vector) -> funcs[INDEX]).index(vector, 0) = 2;
+    *(uint8_t*)(((vectorHeader*)vector) -> funcs[INDEX]).index(vector, 1) = 4;
+    *(uint8_t*)(((vectorHeader*)vector) -> funcs[INDEX]).index(vector, 6) = 7;
     for (int i = 0; i < 10; i++)
-        printf("id %d stores %d\n", i, ptr[i]);
-    ((vectorHeader*)vector) -> free(vector);
+        printf("id %d stores %d\n", i, *(uint8_t*)(((vectorHeader*)vector) -> funcs[INDEX]).index(vector, i));
+    ((vectorHeader*)vector) -> funcs[FREE].free(vector);
 }
 
 void getHelp() {
